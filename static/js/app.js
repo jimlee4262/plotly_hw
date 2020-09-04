@@ -21,7 +21,7 @@ function graph_charts(data_val){
 
         // slicing the data
         // gets the top 10 values and goes in descending order
-        var xvals = sample_vals.slice(0,10).reverse();
+        var xvals = sample_vals.slice(0,10).reverse()
         // gets the top 10 ids and goes in descending order and needs to be object to pull in the actual otu_ids
         var yvals = otu_ids.slice(0,10).reverse().map(object => `OTU ${object}`);
         // gets the labels for the top 10 otus in descending order
@@ -87,7 +87,39 @@ function graph_metadata(data_val){
             var rows = metadata.append('h5');
             // the exact information that is copied and pasted
             rows.text(`${key}: ${value}`)
+
+            // gauge data on frequency
+            if (key == 'wfreq'){
+                wash_freq = value;
+            }
         });
+
+
+
+        // Make a gauge table
+        var gauge_table = [
+            {
+              domain: { x: [0, 1], y: [0, 1] },
+              value: wash_freq,
+              title: { text: "Belly Button Washing Frequency" },
+              type: "indicator",
+              mode: "gauge+number",
+              gauge: {
+                axis: { range: [0, 10],
+                        dtick: 2 },
+                bar: { color: "gray"},
+                steps: [
+                  { range: [0, 2], color: "red" },
+                  { range: [2, 4], color: "orange" },
+                  { range: [4, 6], color: "yellow" },
+                  { range: [6, 8], color: "violet" },
+                  { range: [8, 10], color: "green" }
+                ],
+              }
+            }
+        ];
+
+        Plotly.newPlot('gauge', gauge_table, {responsive: true});
     });
 }
 
